@@ -15,9 +15,9 @@
  */
 
 resource "google_compute_instance_template" "default" {
-  count       = "${var.module_enabled ? 1 : 0}"
-  project     = "${var.project}"
-  name        = "${random_id.rand.dec}"
+  count   = "${var.module_enabled ? 1 : 0}"
+  project = "${var.project}"
+  name    = "${random_id.rand.dec}"
 
   machine_type = "${var.machine_type}"
 
@@ -61,10 +61,11 @@ resource "google_compute_instance_template" "default" {
 }
 
 resource "google_compute_instance_group_manager" "default" {
-  count       = "${var.module_enabled && var.zonal ? 1 : 0}"
-  project     = "${var.project}"
-  name        = "${var.name}"
-  description = "compute VM Instance Group"
+  count              = "${var.module_enabled && var.zonal ? 1 : 0}"
+  project            = "${var.project}"
+  name               = "${var.name}"
+  description        = "compute VM Instance Group"
+  wait_for_instances = "${var.wait_for_instances}"
 
   base_instance_name = "${var.name}"
 
@@ -238,7 +239,7 @@ data "google_compute_instance_group" "zonal" {
   zone    = "${var.zone}"
   project = "${var.project}"
 }
-  
+
 resource "random_id" "rand" {
   byte_length = 8
   prefix      = "default-"
